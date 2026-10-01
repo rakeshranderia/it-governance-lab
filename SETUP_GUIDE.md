@@ -1,6 +1,6 @@
 # Workstation and Azure Setup Guide
 
-The primary workstation can be Windows. A Mac can also be used for SSH/Git work.
+The primary workstation can be Windows. A Mac can also be used for SSH/Git work, but the main lab workflow is expected to run from the Windows PC.
 
 ## Recommended Windows workstation
 
@@ -18,8 +18,6 @@ Install or verify:
 
 ## Quick version checks
 
-Run in PowerShell:
-
 ```powershell
 ssh -V
 git --version
@@ -33,19 +31,17 @@ docker --version
 
 ```powershell
 az login
+az account list --output table
 az account show
 ```
 
 If more than one subscription exists:
 
 ```powershell
-az account list --output table
 az account set --subscription "<subscription-name-or-id>"
 ```
 
 ## SSH key
-
-Check whether a key already exists:
 
 ```powershell
 Get-ChildItem $HOME\.ssh
@@ -62,7 +58,7 @@ Never commit the private key.
 ## Azure cost-safety checklist
 
 - Confirm the subscription containing the trial credit.
-- Create a dedicated resource group for the lab.
+- Create a dedicated resource group.
 - Configure a cost alert/budget.
 - Enable VM auto-shutdown.
 - Prefer small VM sizes.
@@ -79,28 +75,3 @@ VM: vm-itlab-dev-01
 VNet: vnet-itlab-dev
 Subnet: snet-app
 ```
-
-## Connection model
-
-```text
-Local PC / Mac
-      |
-      | SSH
-      v
-Azure Ubuntu VM
-```
-
-For Linux administration, prefer SSH over a graphical desktop.
-
-## VS Code Remote SSH
-
-Recommended extension: **Remote - SSH**.
-
-Typical workflow:
-
-1. Connect to the VM with normal SSH first.
-2. Confirm authentication works.
-3. Add the host to `~/.ssh/config`.
-4. Open VS Code.
-5. Use **Remote-SSH: Connect to Host**.
-6. Edit files on the VM while using the local VS Code interface.

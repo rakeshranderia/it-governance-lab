@@ -1,8 +1,8 @@
-# Module 1 Learning Notes
+# Module Learning Notes Template
 
 ## What I completed
 
-- 
+-
 
 ## Commands I used
 
@@ -12,19 +12,19 @@
 
 ## What broke
 
-- 
+-
 
 ## How I diagnosed it
 
-- 
+-
 
 ## How I fixed it
 
-- 
+-
 
 ## New concepts
 
-- 
+-
 
 ## Before vs now
 
@@ -34,8 +34,8 @@
 
 ## Questions / things to revisit
 
-- 
+-
 
-## Git commits
+## Commit checkpoints
 
-- 
+-

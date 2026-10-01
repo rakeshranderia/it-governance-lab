@@ -53,3 +53,17 @@ Outcome: Logs, monitoring, health checks, secret handling, hardening and an oper
 - APIs: API key, bearer token, JWT and OAuth concepts.
 - Security: relevant OWASP Top 10 review.
 - Azure: cost alerts, auto-shutdown, tagging, cleanup.
+
+## Appendices
+
+### Appendix 1 — Moving from VS Code to Git CLI
+
+A practical transition from GitHub web and VS Code Source Control to understanding and using Git directly.
+
+[Read Appendix 1](docs/appendices/appendix-01-git-cli.md)
+
+### Appendix 2 — Lab Setup and Prerequisites
+
+Workstation setup, required tools, installation, Azure access prerequisites and setup troubleshooting.
+
+[Read Appendix 2](docs/appendices/appendix-02-lab-prerequisites.md)

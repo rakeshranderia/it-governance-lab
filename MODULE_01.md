@@ -13,55 +13,52 @@ By the end of this module:
 - cost controls are in place.
 - basic Linux administration is comfortable.
 
-## Step 1 — Create the GitHub repo
+## Step 1 — Confirm the workstation toolchain
 
-Suggested name: `it-governance-lab`
+Use Appendix 2 to confirm OpenSSH, Git, VS Code, Azure CLI, Terraform and Docker.
 
-Suggested description:
+**Commit checkpoint:** `Document local workstation toolchain`
 
-> Hands-on lab covering Linux, web stacks, Python, APIs, PostgreSQL, Docker, Terraform and Azure for practical technical leadership.
+## Step 2 — Authenticate to Azure
 
-Clone:
-
-```bash
-git clone <repo-url>
-cd it-governance-lab
+```powershell
+az login
+az account list --output table
+az account show
 ```
 
-## Step 2 — Initial Git workflow
+Confirm that the subscription containing the trial credit is active.
 
-```bash
-git status
-git add .
-git commit -m "Initial project structure and learning plan"
-git push
+**Commit checkpoint:** `Document Azure subscription and lab access setup`
+
+## Step 3 — Confirm or create an SSH key
+
+```powershell
+Get-ChildItem $HOME\.ssh
 ```
 
-Useful commands:
+If needed:
 
-```bash
-git status
-git diff
-git log --oneline
-git branch
-git switch -c <branch-name>
+```powershell
+ssh-keygen -t ed25519 -C "it-governance-lab"
 ```
 
-## Step 3 — Azure resource group
+## Step 4 — Create the lab resource group
 
 Recommended:
+- Name: `rg-it-governance-lab-dev`
+- Region: `Australia East`
 
-```text
-Name: rg-it-governance-lab-dev
-Region: Australia East
-```
+## Step 5 — Apply cost guardrails
 
-Later, Terraform will recreate this.
+- configure a budget/cost alert;
+- enable VM auto-shutdown;
+- prefer a small burstable VM;
+- stop/deallocate compute when not in use.
 
-## Step 4 — Ubuntu VM
+## Step 6 — Create the Ubuntu VM
 
-Recommended lab settings:
-
+Recommended:
 - Ubuntu LTS
 - small burstable size
 - SSH public-key authentication
@@ -69,15 +66,15 @@ Recommended lab settings:
 - inbound SSH restricted to your current public IP where practical
 - auto-shutdown enabled
 
-Avoid using a password for SSH.
-
-## Step 5 — Connect
+## Step 7 — Connect
 
 ```bash
 ssh <admin-user>@<public-ip>
 ```
 
-## Step 6 — Linux baseline
+**Commit checkpoint:** `Document Azure Ubuntu VM and SSH setup`
+
+## Step 8 — Linux baseline
 
 ```bash
 sudo apt update
@@ -89,13 +86,12 @@ ip addr
 df -h
 free -h
 ps aux
-top
 ss -tulpn
 systemctl --failed
 journalctl -p err -b
 ```
 
-File and permission basics:
+File/permission basics:
 
 ```bash
 pwd
@@ -106,42 +102,8 @@ chmod 640 lab-test/example.txt
 ls -l lab-test/example.txt
 ```
 
-## Step 7 — Troubleshooting pattern
+## Step 9 — Update learning notes
 
-```text
-What failed?
-↓
-Is the service running?
-↓
-What do the logs say?
-↓
-Is the port listening?
-↓
-Is the firewall/network path open?
-```
+Update `docs/learning-notes/module-01.md`.
 
-Useful commands:
-
-```bash
-systemctl status <service>
-journalctl -u <service>
-```
-
-## Step 8 — Learning note
-
-Create `docs/learning-notes/module-01.md` and record commands, failures, fixes and questions.
-
-## Completion checklist
-
-- [ ] Repo created
-- [ ] Repo cloned locally
-- [ ] Initial commit pushed
-- [ ] Azure CLI authenticated
-- [ ] Dedicated resource group exists
-- [ ] Cost alert/budget configured
-- [ ] Ubuntu VM running
-- [ ] SSH key authentication works
-- [ ] VM auto-shutdown configured
-- [ ] Linux updated
-- [ ] Basic Linux commands tested
-- [ ] Learning notes committed
+**Commit checkpoint:** `Complete Module 1 Linux baseline`

@@ -30,6 +30,10 @@
 
 **Resolution:** Used non-interactive source/package agreement switches and, if required, the `winget` source explicitly.
 
+## Git CLI exposure
+
+_To be completed._
+
 ## Azure
 
 _To be completed._
@@ -47,6 +51,10 @@ _To be completed._
 _To be completed._
 
 ## How I diagnosed it
+
+_To be completed._
+
+## How I fixed it
 
 _To be completed._
 

@@ -50,4 +50,5 @@ See [LEARNING_PATH.md](LEARNING_PATH.md).
 - Use AI as an assistant, but understand every block of code/configuration added.
 - Keep Azure spend controlled.
 - Commit frequently with meaningful messages.
+- Treat commits as part of the learning workflow.
 - Document what changed in your understanding.
