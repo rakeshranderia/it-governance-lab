@@ -1,335 +1,126 @@
-# Module 1 — Workstation, Azure and Linux Baseline
+# Module 1 — Learning Notes
 
-## Objectives
+## What I built
 
-- Confirm workstation tooling
-- Authenticate Azure CLI
-- Confirm the intended Azure subscription
-- Create a dedicated SSH key
-- Create an Azure resource group
-- Select an available low-cost/free-eligible VM size
-- Create an Arm64 Ubuntu VM
-- Diagnose Azure CLI deployment failures
-- Diagnose an SSH connection that appeared to hang
-- Connect successfully using key-based SSH
-- Complete Linux baseline checks
+- Windows workstation toolchain
+- Azure CLI authentication
+- dedicated SSH key
+- Azure resource group
+- Ubuntu 22.04.5 LTS Arm64 VM
+- working SSH command path
+- Linux baseline
+- patch/reboot/validation cycle
 
-## Workstation baseline
+## What broke and what I learned
 
-| Tool | Version |
-|---|---|
-| Windows OpenSSH | 9.5p2 |
-| Git | 2.55.0 |
-| VS Code | 1.138.0 |
-| Azure CLI | 2.90.0 |
-| Terraform | 1.16.2 |
-| Docker | 29.8.1 |
-| Git-bundled OpenSSH | 10.3p1 |
+### VM SKU unavailable
 
-## Lab design decision
+`Standard_B1s` returned `NotAvailableForSubscription`.
 
-Troubleshooting is a first-class learning outcome. The lab should show not only what worked, but how errors were interpreted and narrowed down.
-
-The project follows these principles:
-
-- simple problem;
-- complete technical journey;
-- free-first where practical;
-- reusable by students and others refreshing skills;
-- no sensitive account or workstation identifiers in public documentation.
-
-## Azure baseline
-
-Resource group:
-
-```text
-rg-it-governance-lab-dev
-```
-
-Region:
-
-```text
-Australia East
-```
-
-VM:
-
-```text
-vm-itlab-dev-01
-```
-
-OS:
-
-```text
-Ubuntu 22.04.5 LTS, Arm64
-```
-
-## SSH key
-
-A dedicated ED25519 key pair was created.
-
-```text
-$HOME\.ssh\it-governance-lab
-$HOME\.ssh\it-governance-lab.pub
-```
-
-The private key remains local and must never be committed.
-
-### PowerShell issue
-
-This did not pass the empty passphrase argument correctly:
-
-```powershell
-ssh-keygen -t ed25519 -C "it-governance-lab" -f "$HOME\.ssh\it-governance-lab" -N ""
-```
-
-Working alternative:
-
-```powershell
-cmd /c "ssh-keygen -t ed25519 -C it-governance-lab -f %USERPROFILE%\.ssh\it-governance-lab -N \"\""
-```
-
-## Azure VM troubleshooting
-
-### Generic Azure CLI traceback
-
-Initial VM creation attempts returned:
-
-```text
-The content for this response was already consumed
-```
-
-A Trusted Launch warning appeared nearby, but a retry with `--security-type Standard` produced the same result.
-
-The useful diagnostic was:
-
-```powershell
-az vm list-skus `
-  --location australiaeast `
-  --size Standard_B1s `
-  --all `
-  --output table
-```
-
-`Standard_B1s` was `NotAvailableForSubscription`.
-
-**Learning:** adjacent warnings are not automatically root causes. Check cloud-side constraints such as SKU availability, quota, policy, region and image compatibility.
+**Lesson:** cloud SKUs are constrained by subscription, region and zone. Check availability rather than assuming a documented size is deployable.
 
 ### PowerShell/JMESPath quoting
 
-A complex `--query` failed with:
+A complex Azure CLI `--query` became harder to troubleshoot than the data itself.
 
-```text
-invalid jmespath_type value
-```
+**Lesson:** return JSON and use `ConvertFrom-Json` plus PowerShell objects when shell quoting becomes fragile.
 
-A simpler approach was to return JSON and filter natively:
+### Arm64/x64 mismatch
 
-```powershell
-$skus = az vm list-skus `
-  --location australiaeast `
-  --resource-type virtualMachines `
-  --all `
-  --output json | ConvertFrom-Json
-```
+`Standard_B2pts_v2` is Arm64-only, while the convenient Ubuntu alias resolved to x64.
 
-```powershell
-$skus |
-  Where-Object {
-    $_.restrictions.Count -eq 0 -and
-    ($_.name -like "Standard_B*" -or $_.name -like "Standard_D*")
-  } |
-  Select-Object -First 20 `
-    name,
-    @{Name="vCPU";Expression={($_.capabilities | Where-Object name -eq "vCPUs").value}},
-    @{Name="MemoryGB";Expression={($_.capabilities | Where-Object name -eq "MemoryGB").value}}
-```
+**Lesson:** VM hardware architecture and image architecture must match.
 
-**Learning:** if shell quoting becomes harder than the data problem, use the shell's native object pipeline.
+### SSH troubleshooting
 
-### CPU architecture mismatch
+Network connectivity, the VM, and `sshd` were all healthy.
 
-The selected `Standard_B2pts_v2` VM size was available, but Azure returned:
+The built-in Windows OpenSSH client did not complete the session cleanly, while Git for Windows OpenSSH did.
 
-```text
-Cannot create a VM ... this VM size only supports a CPU Architecture of 'Arm64',
-but an image or disk with CPU Architecture 'x64' was given.
-```
-
-The useful way to read the nested error was:
-
-```text
-DeploymentFailed
-    -> BadRequest
-        -> architecture mismatch
-```
-
-Fix:
-
-```powershell
-az vm create `
-  --resource-group rg-it-governance-lab-dev `
-  --name vm-itlab-dev-01 `
-  --image Canonical:0001-com-ubuntu-server-jammy:22_04-lts-arm64:latest `
-  --size Standard_B2pts_v2 `
-  --admin-username azureuser `
-  --ssh-key-values "$HOME\.ssh\it-governance-lab.pub"
-```
-
-## SSH troubleshooting
-
-### Symptom
-
-```powershell
-ssh -i "$HOME\.ssh\it-governance-lab" azureuser@<PUBLIC-IP>
-```
-
-appeared to hang.
-
-### Confirm network reachability
-
-```powershell
-Test-NetConnection <PUBLIC-IP> -Port 22
-```
-
-Result:
-
-```text
-TcpTestSucceeded : True
-```
-
-This proves the port is reachable, not that authentication will succeed.
-
-### Confirm VM state
-
-```powershell
-az vm get-instance-view `
-  --resource-group rg-it-governance-lab-dev `
-  --name vm-itlab-dev-01 `
-  --query "instanceView.statuses[].displayStatus" `
-  --output table
-```
-
-Result:
-
-```text
-Provisioning succeeded
-VM running
-```
-
-### Check `sshd` from Azure
-
-```powershell
-az vm run-command invoke `
-  --resource-group rg-it-governance-lab-dev `
-  --name vm-itlab-dev-01 `
-  --command-id RunShellScript `
-  --scripts "uptime; systemctl is-active ssh; systemctl status ssh --no-pager | head -20"
-```
-
-This confirmed `sshd` was active and listening.
-
-The logs also showed unrelated pre-authentication connection attempts shortly after the public VM was created.
-
-**Security learning:** public services can be discovered by automated internet scanning very quickly.
-
-### Inspect the SSH handshake
-
-```powershell
-ssh -vvv `
-  -o ConnectTimeout=10 `
-  -o IdentitiesOnly=yes `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP>
-```
-
-The Windows client reached:
-
-```text
-Connection established
-SSH2_MSG_KEXINIT sent
-SSH2_MSG_KEXINIT received
-```
-
-but did not complete the session.
-
-### Compare clients
-
-Windows OpenSSH:
-
-```text
-OpenSSH_for_Windows_9.5p2
-```
-
-Git-bundled OpenSSH:
-
-```text
-OpenSSH_10.3p1
-```
-
-The newer Git-bundled client progressed through key exchange and received the server host key.
-
-### Successful connection
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -o StrictHostKeyChecking=accept-new `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP>
-```
-
-Result:
-
-```text
-Welcome to Ubuntu 22.04.5 LTS (... aarch64)
-```
-
-### Troubleshooting model
+**Lesson:** troubleshoot SSH in layers:
 
 ```text
 VM state
-  -> network reachability
-      -> SSH daemon
-          -> protocol negotiation
-              -> key exchange
-                  -> host identity verification
-                      -> user authentication
-                          -> shell
+-> TCP reachability
+-> sshd
+-> protocol negotiation
+-> key exchange
+-> host verification
+-> authentication
+-> shell
 ```
 
-Test one layer at a time.
+### Public SSH exposure
 
-## Current status
+The VM received unsolicited pre-authentication SSH traffic shortly after creation.
 
-Completed:
+**Lesson:** public IPs are scanned continuously. An unadvertised address is not a security control.
 
-- workstation tools confirmed;
-- Azure CLI authenticated;
-- resource group created;
-- dedicated SSH key created;
-- suitable VM SKU identified;
-- Arm64 Ubuntu VM created;
-- VM health verified;
-- TCP/22 verified;
-- SSH daemon verified;
-- SSH client issue isolated;
-- interactive SSH login successful.
+## Fresh Linux baseline
+
+Observed:
+
+- Ubuntu 22.04.5 LTS
+- Arm64 / aarch64
+- approximately 952 MiB RAM
+- no swap
+- approximately 29 GB root filesystem
+- no failed systemd units
+- SSH listening on TCP/22
+- 112 updates available
+- 92 standard security updates
+
+## Patching
+
+The VM was patched with:
+
+```powershell
+& "C:\Program Files\Git\usr\bin\ssh.exe" `
+  -i "$HOME\.ssh\it-governance-lab" `
+  azureuser@<PUBLIC-IP> `
+  "sudo apt update && sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y"
+```
+
+`needrestart` identified services still using older binaries/libraries.
+
+A reboot was used to complete the maintenance cycle cleanly.
+
+## Post-patch validation
+
+After patching:
+
+- `systemctl --failed` still showed zero failed units
+- memory remained healthy
+- disk usage remained low
+- only `sosreport` remained listed as upgradable
+
+The VM was rebooted and validated again.
+
+## Operational lesson
+
+A complete patch cycle is:
+
+```text
+baseline
+-> patch
+-> review restart requirements
+-> reboot/restart
+-> validate
+```
+
+A successful package command does not, by itself, prove the system is healthy afterwards.
+
+## Status
+
+Module 1 complete.
 
 Next:
 
-- cost guardrails / auto-shutdown;
-- Linux baseline commands;
-- first Linux observations.
-
-## Commit checkpoints
-
-Current checkpoint:
-
 ```text
-Document Azure VM setup and troubleshooting
+Module 2 — LAMP stack
 ```
 
-End of module:
+## Commit checkpoint
 
 ```text
 Complete Module 1 Linux baseline
