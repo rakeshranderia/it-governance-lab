@@ -9,8 +9,21 @@ CREATE TABLE IF NOT EXISTS assets (
     status VARCHAR(30)
 );
 
+-- Seed rows are added only if an asset with the same name does not already exist.
 INSERT INTO assets (asset_name, asset_type, status)
-VALUES
-('Laptop-001','Laptop','Active'),
-('Monitor-001','Monitor','Active'),
-('Phone-001','Mobile','In Stock');
+SELECT 'Laptop-001', 'Laptop', 'Active'
+WHERE NOT EXISTS (
+    SELECT 1 FROM assets WHERE asset_name = 'Laptop-001'
+);
+
+INSERT INTO assets (asset_name, asset_type, status)
+SELECT 'Monitor-001', 'Monitor', 'Active'
+WHERE NOT EXISTS (
+    SELECT 1 FROM assets WHERE asset_name = 'Monitor-001'
+);
+
+INSERT INTO assets (asset_name, asset_type, status)
+SELECT 'Phone-001', 'Mobile', 'In Stock'
+WHERE NOT EXISTS (
+    SELECT 1 FROM assets WHERE asset_name = 'Phone-001'
+);
