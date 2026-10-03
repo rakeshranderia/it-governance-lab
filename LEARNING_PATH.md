@@ -6,7 +6,7 @@
 Outcome: GitHub repo, Azure CLI, Ubuntu VM, SSH, Linux baseline, cost controls.
 
 ### Module 2 — LAMP stack
-Outcome: Linux + Apache + PHP + MySQL/MariaDB with a simple asset application.
+Outcome: Linux + Apache + PHP + MariaDB with a simple CRUD IT Asset Register.
 
 ### Module 3 — Web request flow and break/fix
 Outcome: Understand browser → DNS → firewall → Apache → PHP → DB; deliberately break and repair the stack; add HTTPS.
@@ -67,3 +67,9 @@ A practical transition from GitHub web and VS Code Source Control to understandi
 Workstation setup, required tools, installation, Azure access prerequisites and setup troubleshooting.
 
 [Read Appendix 2](docs/appendices/appendix-02-lab-prerequisites.md)
+
+### Appendix 3 — Working in a Messy Lab Environment
+
+Identity ambiguity, multiple tool versions, PowerShell variables, repeated public IPs, shell differences and practical pre-flight checks.
+
+[Read Appendix 3](docs/appendices/appendix-03-working-in-a-messy-lab.md)
