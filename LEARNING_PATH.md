@@ -8,8 +8,8 @@ Outcome: GitHub repo, Azure CLI, Ubuntu VM, SSH, Linux baseline, cost controls.
 ### Module 2 — LAMP stack
 Outcome: Linux + Apache + PHP + MariaDB with a simple CRUD IT Asset Register.
 
-### Module 3 — Web request flow and break/fix
-Outcome: Understand browser → DNS → firewall → Apache → PHP → DB; deliberately break and repair the stack; add HTTPS.
+### Module 3 — Web request flow, break/fix and HTTPS
+Outcome: Understand browser → listener → Apache → PHP → database flow; deliberately break and repair the stack; enable HTTPS; redirect HTTP to HTTPS.
 
 ### Module 4 — Python fundamentals
 Outcome: Variables, lists, dicts, functions, modules, exceptions, venvs, JSON and an external REST API.
@@ -43,33 +43,3 @@ Outcome: Terraform-created Azure infrastructure hosting the containerised Python
 
 ### Module 14 — Operability
 Outcome: Logs, monitoring, health checks, secret handling, hardening and an operations runbook.
-
-## Optional side quests
-
-- Linux: cron, bash scripting, log rotation, process/disk troubleshooting.
-- Git: merge conflict, revert, branch, PR, release tag.
-- Python: pytest and deliberate test failure.
-- SQL: indexing, parameterised queries and injection risk.
-- APIs: API key, bearer token, JWT and OAuth concepts.
-- Security: relevant OWASP Top 10 review.
-- Azure: cost alerts, auto-shutdown, tagging, cleanup.
-
-## Appendices
-
-### Appendix 1 — Moving from VS Code to Git CLI
-
-A practical transition from GitHub web and VS Code Source Control to understanding and using Git directly.
-
-[Read Appendix 1](docs/appendices/appendix-01-git-cli.md)
-
-### Appendix 2 — Lab Setup and Prerequisites
-
-Workstation setup, required tools, installation, Azure access prerequisites and setup troubleshooting.
-
-[Read Appendix 2](docs/appendices/appendix-02-lab-prerequisites.md)
-
-### Appendix 3 — Working in a Messy Lab Environment
-
-Identity ambiguity, multiple tool versions, PowerShell variables, repeated public IPs, shell differences and practical pre-flight checks.
-
-[Read Appendix 3](docs/appendices/appendix-03-working-in-a-messy-lab.md)

@@ -1,0 +1,18 @@
+<VirtualHost *:443>
+    ServerName <PUBLIC-IP>
+
+    DocumentRoot /var/www/html
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/assetlab.crt
+    SSLCertificateKeyFile /etc/ssl/private/assetlab.key
+
+    <Directory /var/www/html>
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/assetlab-ssl-error.log
+    CustomLog ${APACHE_LOG_DIR}/assetlab-ssl-access.log combined
+</VirtualHost>

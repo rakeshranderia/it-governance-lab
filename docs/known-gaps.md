@@ -2,43 +2,33 @@
 
 The IT Asset Register is a learning application, not a production asset-management platform.
 
-These gaps are intentional and should be visible rather than hidden.
+## HTTPS uses a self-signed certificate
 
-## Current gaps
+TLS encryption is enabled, but the certificate is not signed by a public certificate authority.
 
-### HTTP only
+A production-style implementation would normally use:
 
-The application currently uses HTTP.
+- a DNS name;
+- a trusted certificate authority;
+- automated certificate renewal.
 
-HTTPS/TLS is intentionally deferred to Module 3.
-
-### No authentication
+## No authentication
 
 Anyone who can reach the application can use it.
 
-Authentication and authorisation are outside Module 2's scope.
-
-### No CSRF protection
+## No CSRF protection
 
 Create, update and delete actions do not yet use CSRF tokens.
 
-This is acceptable for the isolated learning exercise but not for a production web application.
+## Minimal server-side validation
 
-### Minimal server-side validation
+Validation remains intentionally basic.
 
-The application checks that required fields are present, but validation is intentionally basic.
+## No audit trail
 
-A production application should validate allowed values, lengths, formats and business rules server-side.
+The application does not record who changed a record, what changed, or when.
 
-### No audit trail
-
-The application does not record:
-
-- who changed a record;
-- what changed;
-- when it changed.
-
-### Local configuration file for secrets
+## Local configuration file for secrets
 
 The live database password is stored outside the web root in:
 
@@ -46,38 +36,18 @@ The live database password is stored outside the web root in:
 /etc/assetlab-db.php
 ```
 
-This is better than committing it or putting it in `/var/www/html`, but production systems should normally use a dedicated secrets-management approach.
+Production systems should normally use a dedicated secrets-management approach.
 
-### No automated tests
+## No automated application tests
 
-CRUD was tested manually in Module 2.
+CRUD has been tested manually.
 
-Automated application tests are introduced later in the broader learning path.
-
-### No backup/recovery workflow
+## No backup/recovery workflow
 
 The database currently has no documented backup or restore process.
 
-### No application monitoring
+## Limited monitoring
 
-Module 2 uses manual health checks only.
+The lab currently uses a shell health check.
 
-Monitoring, health endpoints and operational runbooks are covered later.
-
-## Why document gaps?
-
-A useful technical portfolio should distinguish between:
-
-```text
-deliberate simplification
-```
-
-and:
-
-```text
-unknown risk
-```
-
-The goal is not to pretend the lab is production-ready.
-
-The goal is to demonstrate that the missing controls are understood and intentionally sequenced into later learning.
+The point is to distinguish deliberate simplification from unknown risk.

@@ -1,0 +1,4 @@
+<VirtualHost *:80>
+    ServerName <PUBLIC-IP>
+    Redirect permanent / https://<PUBLIC-IP>/
+</VirtualHost>
