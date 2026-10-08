@@ -2,12 +2,15 @@
 
 Each guide explains one technical concept in plain English and then adds the correct terminology.
 
-## Planned / current guides
+## Current guides
 
-1. How a web request works.
-2. What a LAMP stack actually is.
-3. APIs without the jargon.
-4. Python + FastAPI + PostgreSQL.
-5. Docker explained.
-6. Terraform explained.
-7. From code to cloud: how the stack fits together.
+- [LAMP stack](lamp-stack.md)
+- [Python, JSON and APIs](python-json-api.md)
+
+## Planned guides
+
+- FastAPI and REST endpoints
+- PostgreSQL
+- Docker
+- Terraform
+- From code to cloud: how the stack fits together

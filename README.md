@@ -18,20 +18,17 @@ This lab is intended for students, career-switchers, technical managers and seni
 
 ## Learning approach
 
-This lab has three tracks:
-
 1. **Build** — create working systems.
-2. **Explain** — write ELI5 notes for each major concept.
+2. **Explain** — write ELI5 notes.
 3. **Evidence** — keep Git history, architecture diagrams, troubleshooting notes and runbooks.
-
-The module numbers are a sequence, not calendar days. Multiple modules can be completed in one session.
 
 ## Current status
 
 - Module 1 — complete
 - Module 2 — complete
 - Module 3 — complete
-- Module 4 — next
+- Module 4 — complete
+- Module 5 — next
 
 ## Core stack
 
@@ -62,6 +59,7 @@ See [LEARNING_PATH.md](LEARNING_PATH.md).
 - [ELI5 guides](docs/eli5/README.md)
 - [Troubleshooting notes](docs/troubleshooting/README.md)
 - [Architecture notes](docs/architecture/README.md)
+- [Python exercises](python/README.md)
 
 ## Ground rules
 
