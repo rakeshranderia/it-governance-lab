@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop-001",
+        "type": "Laptop",
+        "status": "Active",
+        "purchase_price": 1850.50
+    },
+    {
+        "id": 2,
+        "name": "Monitor-001",
+        "type": "Monitor",
+        "status": "Repair",
+        "purchase_price": 650.00
+    },
+    {
+        "id": 3,
+        "name": "Phone-001",
+        "type": "Mobile",
+        "status": "In Stock",
+        "purchase_price": 1200.00
+    }
+]
