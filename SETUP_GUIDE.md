@@ -1,6 +1,6 @@
 # Workstation and Azure Setup Guide
 
-The primary workstation can be Windows. A Mac can also be used for SSH/Git work, but the main lab workflow is expected to run from the Windows PC.
+The primary workstation can be Windows. macOS can also be used for Git and SSH work.
 
 ## Recommended Windows workstation
 
@@ -14,7 +14,6 @@ Install or verify:
 - Azure CLI
 - Terraform
 - Docker Desktop
-- Optional later: WSL2 + Ubuntu
 
 ## Quick version checks
 
@@ -47,7 +46,7 @@ az account set --subscription "<subscription-name-or-id>"
 Get-ChildItem $HOME\.ssh
 ```
 
-If needed:
+If required:
 
 ```powershell
 ssh-keygen -t ed25519 -C "it-governance-lab"
@@ -57,11 +56,11 @@ Never commit the private key.
 
 ## Azure cost-safety checklist
 
-- Confirm the subscription containing the trial credit.
+- Confirm the correct subscription.
 - Create a dedicated resource group.
-- Configure a cost alert/budget.
+- Configure a budget/cost alert.
 - Enable VM auto-shutdown.
-- Prefer small VM sizes.
+- Prefer small burstable VM sizes.
 - Stop/deallocate compute when not in use.
 - Destroy temporary Terraform resources after experiments.
 - Review Azure Cost Management regularly.

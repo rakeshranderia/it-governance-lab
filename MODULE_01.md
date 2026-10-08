@@ -44,7 +44,7 @@ The available Arm64 size was:
 Standard_B2pts_v2
 ```
 
-The successful VM command was:
+Successful VM command:
 
 ```powershell
 az vm create `
@@ -58,7 +58,7 @@ az vm create `
 
 ## SSH
 
-The built-in Windows OpenSSH client did not complete the session cleanly. Git for Windows included a newer OpenSSH client that worked reliably for remote command execution.
+Git for Windows' newer OpenSSH client worked reliably for remote command execution:
 
 ```powershell
 & "C:\Program Files\Git\usr\bin\ssh.exe" `
@@ -67,30 +67,7 @@ The built-in Windows OpenSSH client did not complete the session cleanly. Git fo
   "whoami; hostname; uname -a"
 ```
 
-## Fresh Linux baseline
-
-Commands used:
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP> `
-  "whoami; hostname; uname -a; cat /etc/os-release"
-```
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP> `
-  "ip addr; df -h; free -h"
-```
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP> `
-  "ps aux | head; ss -tulpn; systemctl --failed; journalctl -p err -b --no-pager | tail -30"
-```
+## Linux baseline
 
 Observed:
 
@@ -102,7 +79,6 @@ Observed:
 - SSH listening on TCP/22
 - no failed systemd units
 - unsolicited SSH pre-authentication traffic visible in the journal
-- 112 updates available, including 92 standard security updates
 
 ## Patching
 
@@ -113,19 +89,6 @@ Observed:
   "sudo apt update && sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y"
 ```
 
-`needrestart` reported services requiring restart and several deferred restarts.
-
-Post-patch validation:
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP> `
-  "apt list --upgradable 2>/dev/null | head -20; echo '---'; systemctl --failed; echo '---'; free -h; echo '---'; df -h /"
-```
-
-The system remained healthy with no failed units and only `sosreport` still listed as upgradable.
-
 ## Reboot and final validation
 
 ```powershell
@@ -133,26 +96,5 @@ az vm restart `
   --resource-group rg-it-governance-lab-dev `
   --name vm-itlab-dev-01
 ```
-
-Confirm state:
-
-```powershell
-az vm get-instance-view `
-  --resource-group rg-it-governance-lab-dev `
-  --name vm-itlab-dev-01 `
-  --query "instanceView.statuses[].displayStatus" `
-  --output table
-```
-
-Final health validation:
-
-```powershell
-& "C:\Program Files\Git\usr\bin\ssh.exe" `
-  -i "$HOME\.ssh\it-governance-lab" `
-  azureuser@<PUBLIC-IP> `
-  "uptime; echo '---'; systemctl --failed; echo '---'; apt list --upgradable 2>/dev/null | head -20; echo '---'; free -h; echo '---'; df -h /"
-```
-
-## Module 1 complete
 
 **Commit checkpoint:** `Complete Module 1 Linux baseline`

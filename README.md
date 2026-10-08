@@ -12,6 +12,10 @@ The objective is not to become a full-time software engineer. The objective is t
 - communicate credibly with engineers and technical specialists;
 - maintain hands-on knowledge relevant to senior technology leadership.
 
+## Who this is for
+
+This lab is intended for students, career-switchers, technical managers and senior technology leaders who want practical hands-on fluency without turning the exercise into a full software-engineering curriculum.
+
 ## Learning approach
 
 This lab has three tracks:
@@ -22,13 +26,20 @@ This lab has three tracks:
 
 The module numbers are a sequence, not calendar days. Multiple modules can be completed in one session.
 
+## Current status
+
+- Module 1 — complete
+- Module 2 — complete
+- Module 3 — complete
+- Module 4 — next
+
 ## Core stack
 
 - Git / GitHub
 - Linux
 - Apache
 - PHP
-- MySQL/MariaDB
+- MariaDB
 - Python
 - FastAPI
 - PostgreSQL
@@ -42,6 +53,15 @@ The module numbers are a sequence, not calendar days. Multiple modules can be co
 ## Planned modules
 
 See [LEARNING_PATH.md](LEARNING_PATH.md).
+
+## Useful references
+
+- [Setup guide](SETUP_GUIDE.md)
+- [Known gaps](docs/known-gaps.md)
+- [Health checks](docs/health-checks.md)
+- [ELI5 guides](docs/eli5/README.md)
+- [Troubleshooting notes](docs/troubleshooting/README.md)
+- [Architecture notes](docs/architecture/README.md)
 
 ## Ground rules
 

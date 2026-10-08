@@ -43,3 +43,27 @@ Outcome: Terraform-created Azure infrastructure hosting the containerised Python
 
 ### Module 14 — Operability
 Outcome: Logs, monitoring, health checks, secret handling, hardening and an operations runbook.
+
+## Optional side quests
+
+- Linux: cron, bash scripting, log rotation, process/disk troubleshooting.
+- Git: merge conflict, revert, branch, PR, release tag.
+- Python: pytest and deliberate test failure.
+- SQL: indexing, parameterised queries and injection risk.
+- APIs: API key, bearer token, JWT and OAuth concepts.
+- Security: relevant OWASP Top 10 review.
+- Azure: cost alerts, auto-shutdown, tagging, cleanup.
+
+## Appendices
+
+### Appendix 1 — Moving from VS Code to Git CLI
+[Read Appendix 1](docs/appendices/appendix-01-git-cli.md)
+
+### Appendix 2 — Lab Setup and Prerequisites
+[Read Appendix 2](docs/appendices/appendix-02-lab-prerequisites.md)
+
+### Appendix 3 — Working in a Messy Lab Environment
+[Read Appendix 3](docs/appendices/appendix-03-working-in-a-messy-lab.md)
+
+### Appendix 4 — Connecting to the Lab from macOS
+[Read Appendix 4](docs/appendices/appendix-04-macos-access.md)
