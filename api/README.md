@@ -1,17 +1,48 @@
 # API
 
-This directory contains the FastAPI work from Module 5 and will continue to evolve during Modules 6 and 7.
+The FastAPI application now uses PostgreSQL for persistence.
 
-## Current endpoints
+## Current structure
 
-- `GET /`
-- `GET /health`
-- `GET /assets`
-- `GET /assets/{asset_id}`
-- `POST /assets`
-- `PATCH /assets/{asset_id}`
-- `DELETE /assets/{asset_id}`
-- `GET /assets-page`
-- `GET /docs`
+```text
+api/main.py
+→ routes and HTTP behaviour
 
-Module 5 stores assets in memory only. PostgreSQL persistence is introduced in Module 6.
+api/db.py
+→ PostgreSQL connection helper
+
+api/assets_page.html
+→ human-friendly presentation
+```
+
+## Environment variables
+
+The application expects:
+
+```text
+PGHOST
+PGPORT
+PGDATABASE
+PGUSER
+PGPASSWORD
+```
+
+Use:
+
+```powershell
+.\scripts\module6-postgres-session.ps1
+```
+
+to set them for the current PowerShell session.
+
+## Run
+
+```powershell
+python\.venv\Scripts\python.exe -m uvicorn api.main:app --reload
+```
+
+## Persistence milestone
+
+Unlike Module 5, data is now stored in PostgreSQL.
+
+A Uvicorn restart should not remove created, updated or deleted asset records.
