@@ -1,15 +1,17 @@
 from pathlib import Path
 
+import requests
 from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from api.db import get_connection
+from integration.service import run_import
 
 
 app = FastAPI(
     title="IT Governance Lab API",
-    version="0.2.0"
+    version="0.3.0"
 )
 
 
@@ -32,7 +34,8 @@ def root():
     return {
         "message": "IT Governance Lab API",
         "status": "running",
-        "storage": "PostgreSQL"
+        "storage": "PostgreSQL",
+        "integration": "DummyJSON laptops"
     }
 
 
@@ -245,6 +248,76 @@ def delete_asset(asset_id: int):
             connection.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get("/external-assets")
+def get_external_assets():
+    with get_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    id,
+                    source_system,
+                    source_record_id,
+                    name,
+                    type,
+                    status,
+                    purchase_price,
+                    imported_at,
+                    updated_at
+                FROM external_assets
+                ORDER BY id
+                """
+            )
+
+            return cursor.fetchall()
+
+
+@app.get("/external-assets/{external_asset_id}")
+def get_external_asset(external_asset_id: int):
+    with get_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    id,
+                    source_system,
+                    source_record_id,
+                    name,
+                    type,
+                    status,
+                    purchase_price,
+                    source_payload,
+                    imported_at,
+                    updated_at
+                FROM external_assets
+                WHERE id = %s
+                """,
+                (external_asset_id,)
+            )
+
+            external_asset = cursor.fetchone()
+
+    if external_asset is None:
+        raise HTTPException(
+            status_code=404,
+            detail="External asset not found"
+        )
+
+    return external_asset
+
+
+@app.post("/external-assets/import")
+def import_external_assets():
+    try:
+        return run_import()
+
+    except requests.RequestException as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"External source unavailable: {exc}"
+        ) from exc
 
 
 @app.get("/assets-page", response_class=HTMLResponse)
