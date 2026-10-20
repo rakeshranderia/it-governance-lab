@@ -28,13 +28,4 @@ $env:PGDATABASE = $Database
 $env:PGUSER = $User
 $env:PGPASSWORD = $plainPassword
 
-Write-Host ""
-Write-Host "PostgreSQL environment variables are now set for THIS PowerShell session."
-Write-Host "PGHOST=$env:PGHOST"
-Write-Host "PGPORT=$env:PGPORT"
-Write-Host "PGDATABASE=$env:PGDATABASE"
-Write-Host "PGUSER=$env:PGUSER"
-Write-Host "PGPASSWORD=<set in process memory>"
-Write-Host ""
-Write-Host "Next:"
-Write-Host "python\.venv\Scripts\python.exe api\db_check.py"
+Write-Host "PostgreSQL environment variables set for this PowerShell session."

@@ -1,41 +1,57 @@
 # PostgreSQL — Module 6
 
-This directory contains the PostgreSQL bootstrap and verification scripts.
+Module 6 replaces the in-memory FastAPI asset list with PostgreSQL persistence.
+
+## Database objects
+
+```text
+database: assetlab
+application login: assetapp
+table: assets
+```
+
+The application login is deliberately separate from the PostgreSQL administrator account.
 
 ## Files
 
-- `01_bootstrap.sql` — creates the `assetapp` login, `assetlab` database, `assets` table, indexes and seed data.
-- `02_verify.sql` — verifies the database, login and sample data.
+- `01_bootstrap.sql` — database/login/schema/index/seed bootstrap.
+- `02_verify.sql` — verifies connectivity and sample data.
+- `03_postgres_features.sql` — PostgreSQL-specific examples such as `ILIKE`, `RETURNING`, upsert and transactions.
 
-## Windows quick start
+## Schema
 
-From the repository root:
+The `assets` table uses:
 
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\module6-postgres-bootstrap.ps1
+```text
+BIGINT GENERATED ALWAYS AS IDENTITY
+VARCHAR
+NUMERIC(10,2)
+TIMESTAMPTZ
+NOT NULL
+UNIQUE
+CHECK
+PRIMARY KEY
 ```
 
-The script prompts for the PostgreSQL `postgres` administrator password and a password for the dedicated `assetapp` login.
+Indexes are created on `status` and `type`.
 
-Passwords are not written to the repository.
+## SQL coverage
 
-## Python connectivity test
+For publication completeness, Module 6 covers:
 
-Install the driver:
-
-```powershell
-python\.venv\Scripts\python.exe -m pip install "psycopg[binary]"
+```text
+CREATE TABLE
+INSERT
+SELECT
+WHERE
+ORDER BY
+UPDATE
+DELETE
+JOIN
+UNION
+constraints
+indexes
+transactions
 ```
 
-Set connection variables for the current PowerShell session:
-
-```powershell
-.\scripts\module6-postgres-session.ps1
-```
-
-Then run:
-
-```powershell
-python\.venv\Scripts\python.exe api\db_check.py
-```
+Hands-on execution can move quickly through concepts already familiar to the learner.

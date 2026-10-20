@@ -2,22 +2,23 @@
 
 The FastAPI application now uses PostgreSQL for persistence.
 
-## Current structure
+## Structure
 
 ```text
 api/main.py
-→ routes and HTTP behaviour
+→ FastAPI routes and HTTP behaviour
 
 api/db.py
 → PostgreSQL connection helper
 
 api/assets_page.html
-→ human-friendly presentation
+→ human-friendly HTML/CSS presentation
+
+api/db_check.py
+→ direct Python-to-PostgreSQL connectivity test
 ```
 
 ## Environment variables
-
-The application expects:
 
 ```text
 PGHOST
@@ -27,13 +28,11 @@ PGUSER
 PGPASSWORD
 ```
 
-Use:
+Set them for the current PowerShell session with:
 
 ```powershell
 .\scripts\module6-postgres-session.ps1
 ```
-
-to set them for the current PowerShell session.
 
 ## Run
 
@@ -41,8 +40,4 @@ to set them for the current PowerShell session.
 python\.venv\Scripts\python.exe -m uvicorn api.main:app --reload
 ```
 
-## Persistence milestone
-
-Unlike Module 5, data is now stored in PostgreSQL.
-
-A Uvicorn restart should not remove created, updated or deleted asset records.
+The key Module 6 milestone is persistence: data survives a Uvicorn restart because PostgreSQL, not Python memory, owns the state.

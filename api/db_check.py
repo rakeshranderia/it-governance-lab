@@ -33,11 +33,10 @@ def main():
                 "SELECT id, name, type, status, purchase_price "
                 "FROM assets ORDER BY id"
             )
-            rows = cursor.fetchall()
 
             print()
             print("Assets in PostgreSQL:")
-            for row in rows:
+            for row in cursor.fetchall():
                 print(row)
     finally:
         connection.close()

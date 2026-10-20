@@ -1,18 +1,17 @@
--- Module 6 PostgreSQL-specific examples.
--- These examples are documentation-oriented and can be run manually.
+-- PostgreSQL-specific examples for Module 6.
 
 -- Case-insensitive search.
 SELECT *
 FROM assets
 WHERE name ILIKE '%laptop%';
 
--- Insert and immediately return the generated row.
+-- INSERT ... RETURNING.
 INSERT INTO assets (name, type, status, purchase_price)
 VALUES ('Demo-Asset', 'Demo', 'In Stock', 10.00)
 ON CONFLICT (name) DO NOTHING
 RETURNING *;
 
--- Upsert example.
+-- UPSERT.
 INSERT INTO assets (name, type, status, purchase_price)
 VALUES ('Demo-Asset', 'Demo', 'Active', 15.00)
 ON CONFLICT (name)
@@ -22,7 +21,7 @@ DO UPDATE SET
     updated_at = CURRENT_TIMESTAMP
 RETURNING *;
 
--- Transaction example.
+-- Transaction / rollback demonstration.
 BEGIN;
 
 UPDATE assets
@@ -32,6 +31,6 @@ WHERE name = 'Demo-Asset';
 
 ROLLBACK;
 
--- Cleanup demo row.
+-- Cleanup.
 DELETE FROM assets
 WHERE name = 'Demo-Asset';

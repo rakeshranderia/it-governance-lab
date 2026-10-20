@@ -7,10 +7,11 @@ Each guide explains one technical concept in plain English and then adds the cor
 - [LAMP stack](lamp-stack.md)
 - [Python, JSON and APIs](python-json-api.md)
 - [FastAPI and HTTP](fastapi-and-http.md)
+- [PostgreSQL persistence](postgresql.md)
 
 ## Planned guides
 
-- PostgreSQL
+- Integration
 - Docker
 - Terraform
 - From code to cloud: how the stack fits together
