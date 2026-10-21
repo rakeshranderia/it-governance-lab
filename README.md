@@ -10,7 +10,9 @@ A hands-on learning lab for rebuilding practical technical depth across Linux, w
 - Module 4 — complete
 - Module 5 — complete
 - Module 6 — complete
-- Module 7 — next
+- Module 7 — complete
+- Module 8 — complete
+- Module 9 — next
 
 See [LEARNING_PATH.md](LEARNING_PATH.md) for the full roadmap.
 
@@ -25,3 +27,4 @@ See [LEARNING_PATH.md](LEARNING_PATH.md) for the full roadmap.
 - [Python exercises](python/README.md)
 - [FastAPI / PostgreSQL API](api/README.md)
 - [PostgreSQL scripts](database/README.md)
+- [Module 8 Docker](MODULE_08.md)

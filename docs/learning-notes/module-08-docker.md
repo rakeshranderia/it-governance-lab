@@ -1,7 +1,5 @@
 # Module 8 — Docker Learning Notes
 
-## What changes from Module 7?
-
 Before Docker:
 
 ```text
@@ -18,28 +16,13 @@ Docker
 └─ db container
 ```
 
-The application code is still the same.
+The application code stayed broadly the same. The runtime packaging and networking changed.
 
-What changes is how the runtime dependencies are packaged, connected and started.
-
-## Important networking lesson
-
-`localhost` is relative to the machine or container where the process is running.
-
-From the Windows host:
-
-```text
-127.0.0.1:8000 → FastAPI container
-```
-
-From the FastAPI container:
-
-```text
-db:5432 → PostgreSQL container
-```
-
-## Important storage lesson
-
-Containers are disposable.
-
-Persistent database state belongs in a Docker volume, not only in the container filesystem.
+## Main lessons
+- `localhost` is relative to the current host/container.
+- From Windows, `127.0.0.1:8000` reaches the API container.
+- From the API container, `db:5432` reaches PostgreSQL.
+- Containers are disposable.
+- Persistent database state belongs in a Docker volume.
+- An API process can be up while a database dependency is unavailable.
+- `.env.example` is public documentation; `.env` contains the real local values; GitHub Secrets are for CI/CD automation.
